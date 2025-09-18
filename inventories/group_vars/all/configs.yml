@@ -21,6 +21,36 @@ configuration_items:
     default_attr: "ansible_facts.controller_groups"
     optional_attr: "ansible_facts.controller_groups_{{ env }}"
     role_name: "infra.aap_configuration.controller_host_groups"
+  - name: controller_inventories
+    directory: "controller/controller_inventories"
+    default_attr: "ansible_facts.controller_inventories"
+    optional_attr: "ansible_facts.controller_inventories_{{ env }}"
+    role_name: "infra.aap_configuration.controller_inventories"
+  - name: controller_inventory_sources
+    directory: "controller/controller_inventory_sources"
+    default_attr: "ansible_facts.controller_inventory_sources"
+    optional_attr: "ansible_facts.controller_inventory_sources_{{ env }}"
+    role_name: "infra.aap_configuration.controller_inventory_sources" 
+  - name: controller_job_templates
+    directory: "controller/controller_job_templates"
+    default_attr: "ansible_facts.controller_templates"
+    optional_attr: "ansible_facts.controller_templates_{{ env }}"
+    role_name: "infra.aap_configuration.controller_job_templates"
+  - name: controller_workflows
+    directory: "controller/controller_workflow_job_templates"
+    default_attr: "ansible_facts.controller_workflows"
+    optional_attr: "ansible_facts.controller_workflows_{{ env }}"
+    role_name: "infra.aap_configuration.controller_workflow_job_templates"
+  - name: controller_roles
+    directory: "controller/controller_roles"
+    default_attr: "ansible_facts.controller_roles"
+    optional_attr: "ansible_facts.controller_roles_{{ env }}"
+    role_name: "infra.aap_configuration.controller_roles"
+  - name: controller_schedules
+    directory: "controller/controller_schedules"
+    default_attr: "ansible_facts.controller_schedules"
+    optional_attr: "ansible_facts.controller_schedules_{{ env }}"
+    role_name: "infra.aap_configuration.controller_schedules"
   - name: controller_organizations
     directory: "controller/controller_organizations"
     default_attr: "ansible_facts.aap_organizations"
