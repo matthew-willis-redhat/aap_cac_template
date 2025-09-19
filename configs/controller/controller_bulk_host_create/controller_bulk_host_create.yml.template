@@ -1,0 +1,8 @@
+---
+# https://github.com/redhat-cop/infra.aap_configuration/tree/devel/roles/controller_bulk_host_create
+controller_bulk_host_create: []
+
+# Environment specific lists
+# controller_bulk_host_create_dev: []
+# controller_bulk_host_create_prod: []
+...

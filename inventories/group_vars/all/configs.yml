@@ -96,16 +96,31 @@ controller_configuration_items:
     default_attr: "ansible_facts.controller_labels"
     env_attr: "ansible_facts.controller_labels_{{ env }}"
     role_name: "infra.aap_configuration.controller_labels"
+  - name: controller_credential_types
+    directory: "controller/controller_credential_types"
+    default_attr: "ansible_facts.controller_credential_types"
+    env_attr: "ansible_facts.controller_credential_types_{{ env }}"
+    role_name: "infra.aap_configuration.controller_credential_types"
   - name: controller_credentials
     directory: "controller/controller_credentials"
     default_attr: "ansible_facts.controller_credentials"
     env_attr: "ansible_facts.controller_credentials_{{ env }}"
     role_name: "infra.aap_configuration.controller_credentials"
+  - name: controller_credential_input_sources
+    directory: "controller/controller_credential_input_sources"
+    default_attr: "ansible_facts.controller_credential_input_sources"
+    env_attr: "ansible_facts.controller_credential_input_sources_{{ env }}"
+    role_name: "infra.aap_configuration.controller_credential_input_sources"
   - name: controller_execution_environments
     directory: "controller/controller_execution_environments"
     default_attr: "ansible_facts.controller_execution_environments"
     env_attr: "ansible_facts.controller_execution_environments_{{ env }}"
     role_name: "infra.aap_configuration.controller_execution_environments"
+  - name: controller_applications
+    directory: "controller/controller_applications"
+    default_attr: "ansible_facts.aap_applications"
+    env_attr: "ansible_facts.aap_applications_{{ env }}"
+    role_name: "infra.aap_configuration.controller_applications"
   - name: controller_notification_templates
     directory: "controller/controller_notification_templates"
     default_attr: "ansible_facts.controller_notifications"
@@ -131,6 +146,11 @@ controller_configuration_items:
     default_attr: "ansible_facts.controller_hosts"
     env_attr: "ansible_facts.controller_hosts_{{ env }}"
     role_name: "infra.aap_configuration.controller_hosts"
+  - name: controller_bulk_host_create
+    directory: "controller/controller_bulk_host_create"
+    default_attr: "ansible_facts.controller_bulk_hosts"
+    env_attr: "ansible_facts.controller_bulk_hosts_{{ env }}"
+    role_name: "infra.aap_configuration.controller_bulk_host_create"
   - name: controller_host_groups
     directory: "controller/controller_host_groups"
     default_attr: "ansible_facts.controller_groups"
