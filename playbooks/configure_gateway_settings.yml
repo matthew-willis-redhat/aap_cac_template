@@ -1,18 +1,18 @@
 ---
-- name: Configure Ansible Automation Platform | controller_settings & gateway_settings
+- name: Configure Ansible Automation Platform | gateway_settings
   hosts: "{{ env | default('dev') }}"
   connection: local
   gather_facts: false
 
   pre_tasks:
-    - name: Include vars from vault | controller_settings & gateway_settings
+    - name: Include vars from vault | gateway_settings
       ansible.builtin.include_vars:
         file: "../vaults/{{ env }}.yml"
       tags:
         - always
 
   tasks:
-    - name: Collect configurations | controller_settings & gateway_settings
+    - name: Collect configurations | gateway_settings
       ansible.builtin.include_tasks:
         file: "configure_items.yml"
       vars:
@@ -22,8 +22,7 @@
         __configure_var_env_name: "{{ item['env_attr'] }}"
       loop: "{{ configuration_items }}"
       when:
-        - item['name'] == 'controller_settings' or
-          item['name'] == 'gateway_settings'
+        - item['name'] == 'gateway_settings'
       tags:
         - always
 
@@ -33,15 +32,6 @@
       when:
         - gateway_settings is defined
         - gateway_settings | length > 0
-      tags:
-        - always
-
-    - name: INCLUDE_ROLE | infra.aap_configuration.controller_settings
-      ansible.builtin.include_role:
-        name: infra.aap_configuration.controller_settings
-      when:
-        - controller_settings is defined
-        - controller_settings | length > 0
       tags:
         - always
 ...
