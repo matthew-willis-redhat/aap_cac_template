@@ -7,26 +7,241 @@
   pre_tasks:
     - name: Include vars from vault
       ansible.builtin.include_vars:
-        file: "../vaults/{{ env }}.yml"
+        file: ../vaults/{{ env }}.yml
       tags:
         - always
 
   tasks:
-    - name: Collect configurations
+    - name: INCLUDE_TASK | dispatch
       ansible.builtin.include_tasks:
-        file: "configure_items.yml"
-      vars:
-        __configure_aap_dir: "{{ item['directory'] }}"
-        __configure_aap_setting: "{{ item['name'] }}"
-        __configure_var_name: "{{ item['default_attr'] }}"
-        __configure_var_env_name: "{{ item['env_attr'] }}"
-      loop: "{{ configuration_items }}"
+        file: dispatch.yml
+        apply: 
+          tags: 
+            - dispatch
       tags:
-        - always
+        - never
+        - dispatch
+    
+    - name: INCLUDE_TASK | configure_controller_settings.yml
+      ansible.builtin.include_tasks:
+        file: configure_controller_settings.yml
+        apply: 
+          tags: 
+            - controller_settings
+      when: 
+        - config_controller_settings
+      tags:
+        - never
+        - controller_settings
 
-    - name: INCLUDE_ROLE | infra.aap_configuration.dispatch
-      ansible.builtin.include_role:
-        name: infra.aap_configuration.dispatch
+    - name: INCLUDE_TASK | configure_controller_instances.yml
+      ansible.builtin.include_tasks:
+        file: configure_controller_instances.yml
+        apply: 
+          tags: 
+            - controller_instances
+      when:
+        - config_controller_instances
       tags:
-        - always
+        - never
+        - controller_instances
+
+    - name: INCLUDE_TASK | configure_controller_instance_groups.yml
+      ansible.builtin.include_tasks:
+        file: configure_controller_instance_groups.yml
+        apply: 
+          tags: 
+            - controller_instance_groups
+      when: 
+        - config_controller_instance_groups
+      tags:
+        - never
+        - controller_instance_groups
+
+    - name: INCLUDE_TASK | configure_controller_labels.yml
+      ansible.builtin.include_tasks:
+        file: configure_controller_labels.yml
+        apply: 
+          tags: 
+            - controller_labels
+      when: 
+        - config_controller_labels
+      tags:
+        - never
+        - controller_labels
+
+    - name: INCLUDE_TASK | configure_controller_credential_types.yml
+      ansible.builtin.include_tasks:
+        file: configure_controller_credential_types.yml
+        apply: 
+          tags: 
+            - controller_credential_types
+      when: 
+        - config_controller_credential_types
+      tags:
+        - never
+        - controller_credential_types
+    
+    - name: INCLUDE_TASK | configure_controller_credentials.yml
+      ansible.builtin.include_tasks:
+        file: configure_controller_credentials.yml
+        apply: 
+          tags: 
+            - controller_credentials
+      when: 
+        - config_controller_credentials
+      tags:
+        - never
+        - controller_credentials
+
+    - name: INCLUDE_TASK | configure_controller_credential_input_sources.yml
+      ansible.builtin.include_tasks:
+        file: configure_controller_credential_input_sources.yml
+        apply: 
+          tags: 
+            - controller_credential_input_sources
+      when: 
+        - config_controller_credential_input_sources
+      tags:
+        - never
+        - controller_credential_input_sources
+
+    - name: INCLUDE_TASK | configure_controller_execution_environments.yml
+      ansible.builtin.include_tasks:
+        file: configure_controller_execution_environments.yml
+        apply: 
+          tags: 
+            - controller_execution_environments
+      when: 
+        - config_controller_execution_environments
+      tags:
+        - never
+        - controller_execution_environments
+
+    - name: INCLUDE_TASK | configure_controller_applications.yml
+      ansible.builtin.include_tasks:
+        file: configure_controller_applications.yml
+        apply: 
+          tags: 
+            - configure_controller_applications
+      when: 
+        - config_controller_applications
+      tags:
+        - never
+        - configure_controller_applications
+
+    - name: INCLUDE_TASK | configure_controller_notification_templates.yml
+      ansible.builtin.include_tasks:
+        file: configure_controller_notification_templates.yml
+        apply: 
+          tags: 
+            - controller_notification_templates
+      when: 
+        - config_controller_notification_templates
+      tags:
+        - never
+        - controller_notification_templates
+
+    - name: INCLUDE_TASK | configure_controller_projects.yml
+      ansible.builtin.include_tasks:
+        file: configure_controller_projects.yml
+        apply: 
+          tags: 
+            - controller_projects
+      when: 
+        - config_controller_projects
+      tags:
+        - never
+        - controller_projects
+
+    - name: INCLUDE_TASK | configure_controller_inventories.yml
+      ansible.builtin.include_tasks:
+        file: configure_controller_inventories.yml
+        apply: 
+          tags: 
+            - controller_inventories
+            - controller_inventory_sources
+      when: 
+        - config_controller_inventories
+        - config_controller_inventory_sources
+      tags:
+        - never
+        - controller_inventories
+        - controller_inventory_sources
+
+    - name: INCLUDE_TASK | configure_controller_hosts.yml
+      ansible.builtin.include_tasks:
+        file: configure_controller_hosts.yml
+        apply: 
+          tags: 
+            - controller_hosts
+            - controller_host_groups
+      when: 
+        - config_controller_hosts
+        - config_controller_host_groups
+      tags:
+        - never
+        - controller_hosts
+        - controller_host_groups
+
+    - name: INCLUDE_TASK | configure_controller_bulk_hosts.yml
+      ansible.builtin.include_tasks:
+        file: configure_controller_bulk_hosts.yml
+        apply: 
+          tags: 
+            - controller_bulk_hosts
+      when: 
+        - config_controller_bulk_hosts
+      tags:
+        - never
+        - controller_bulk_hosts
+
+    - name: INCLUDE_TASK | configure_controller_job_templates.yml
+      ansible.builtin.include_tasks:
+        file: configure_controller_job_templates.yml
+        apply: 
+          tags: 
+            - controller_job_templates
+      when: 
+        - config_controller_job_templates
+      tags:
+        - never
+        - controller_job_templates
+
+    - name: INCLUDE_TASK | configure_controller_workflow_job_templates.yml
+      ansible.builtin.include_tasks:
+        file: configure_controller_workflow_job_templates.yml
+        apply: 
+          tags: 
+            - controller_workflow_job_templates
+      when: 
+        - config_controller_workflow_job_templates
+      tags:
+        - never
+        - controller_workflow_job_templates
+    
+    - name: INCLUDE_TASK | configure_controller_schedules.yml
+      ansible.builtin.include_tasks:
+        file: configure_controller_schedules.yml
+        apply: 
+          tags: 
+            - controller_schedules
+      when: 
+        - config_controller_schedules
+      tags:
+        - never
+        - controller_schedules    
+    
+    - name: INCLUDE_TASK | configure_controller_roles.yml
+      ansible.builtin.include_tasks:
+        file: configure_controller_roles.yml
+        apply: 
+          tags: 
+            - controller_roles
+      when: 
+        - config_controller_roles
+      tags:
+        - never
+        - controller_roles
+    
 ...

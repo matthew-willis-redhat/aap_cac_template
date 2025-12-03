@@ -1,37 +1,20 @@
 ---
-- name: Configure Ansible Automation Platform | controller_labels
-  hosts: "{{ env | default('dev') }}"
-  connection: local
-  gather_facts: false
+- name: Collect configurations | controller_labels
+  ansible.builtin.include_tasks:
+    file: "configure_items.yml"
+  vars:
+    __configure_aap_dir: "{{ item['directory'] }}"
+    __configure_aap_setting: "{{ item['name'] }}"
+    __configure_var_name: "{{ item['default_attr'] }}"
+    __configure_var_env_name: "{{ item['env_attr'] }}"
+  loop: "{{ configuration_items }}"
+  when:
+    - item['name'] == 'controller_labels'
 
-  pre_tasks:
-    - name: Include vars from vault | controller_labels
-      ansible.builtin.include_vars:
-        file: "../vaults/{{ env }}.yml"
-      tags:
-        - always
-
-  tasks:
-    - name: Collect configurations | controller_labels
-      ansible.builtin.include_tasks:
-        file: "configure_items.yml"
-      vars:
-        __configure_aap_dir: "{{ item['directory'] }}"
-        __configure_aap_setting: "{{ item['name'] }}"
-        __configure_var_name: "{{ item['default_attr'] }}"
-        __configure_var_env_name: "{{ item['env_attr'] }}"
-      loop: "{{ configuration_items }}"
-      when:
-        - item['name'] == 'controller_labels'
-      tags:
-        - always
-
-    - name: INCLUDE_ROLE | infra.aap_configuration.controller_labels
-      ansible.builtin.include_role:
-        name: infra.aap_configuration.controller_labels
-      when:
-        - controller_labels is defined
-        - controller_labels| length > 0
-      tags:
-        - always
+- name: INCLUDE_ROLE | infra.aap_configuration.controller_labels
+  ansible.builtin.include_role:
+    name: infra.aap_configuration.controller_labels
+  when:
+    - controller_labels is defined
+    - controller_labels| length > 0
 ...

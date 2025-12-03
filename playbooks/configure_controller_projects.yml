@@ -1,5 +1,5 @@
 ---
-- name: Collect configurations | controller_settings
+- name: Collect configurations | controller_projects
   ansible.builtin.include_tasks:
     file: "configure_items.yml"
   vars:
@@ -9,12 +9,12 @@
     __configure_var_env_name: "{{ item['env_attr'] }}"
   loop: "{{ configuration_items }}"
   when:
-    - item['name'] == 'controller_settings'
+    - item['name'] == 'controller_projects'
 
-- name: INCLUDE_ROLE | infra.aap_configuration.controller_settings
+- name: INCLUDE_ROLE | infra.aap_configuration.controller_projects
   ansible.builtin.include_role:
-    name: infra.aap_configuration.controller_settings
+    name: infra.aap_configuration.controller_projects
   when:
-    - controller_settings is defined
-    - controller_settings | length > 0
+    - controller_projects is defined
+    - controller_projects| length > 0
 ...

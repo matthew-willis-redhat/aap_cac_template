@@ -1,6 +1,28 @@
 ---
 configs_directory: "../configs"
 
+
+config_controller_applications: true
+config_controller_bulk_hosts: true
+config_controller_credential_input_sources: true
+config_controller_credential_types: true
+config_controller_credentials: true
+config_controller_execution_environments: true
+config_controller_hosts: true
+config_controller_host_groups: true
+config_controller_instance_groups: true
+config_controller_instances: true
+config_controller_inventories: true
+config_controller_inventory_sources: true
+config_controller_job_templates: true
+config_controller_labels: true
+config_controller_notification_templates: true
+config_controller_projects: true
+config_controller_roles: true
+config_controller_schedules: true
+config_controller_settings: true
+config_controller_workflow_job_templates: true
+
 gateway_configuration_items:
   - name: gateway_authenticators
     directory: "gateway/gateway_authenticators"
@@ -22,7 +44,7 @@ gateway_configuration_items:
     default_attr: "ansible_facts.aap_organizations"
     env_attr: "ansible_facts.aap_organizations_{{ env }}"
     role_name: "infra.aap_configuration.gateway_organizations"
-  - name: gateway_applications
+  - name: aap_applications
     directory: "gateway/gateway_applications"
     default_attr: "ansible_facts.aap_applications"
     env_attr: "ansible_facts.aap_applications_{{ env }}"
@@ -156,7 +178,7 @@ controller_configuration_items:
     default_attr: "ansible_facts.controller_execution_environments"
     env_attr: "ansible_facts.controller_execution_environments_{{ env }}"
     role_name: "infra.aap_configuration.controller_execution_environments"
-  - name: controller_applications
+  - name: aap_applications
     directory: "controller/controller_applications"
     default_attr: "ansible_facts.aap_applications"
     env_attr: "ansible_facts.aap_applications_{{ env }}"
@@ -196,7 +218,7 @@ controller_configuration_items:
     default_attr: "ansible_facts.controller_groups"
     env_attr: "ansible_facts.controller_groups_{{ env }}"
     role_name: "infra.aap_configuration.controller_host_groups"
-  - name: controller_job_templates
+  - name: controller_templates
     directory: "controller/controller_job_templates"
     default_attr: "ansible_facts.controller_templates"
     env_attr: "ansible_facts.controller_templates_{{ env }}"

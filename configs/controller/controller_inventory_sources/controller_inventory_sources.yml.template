@@ -1,0 +1,8 @@
+---
+# https://github.com/redhat-cop/infra.aap_configuration/tree/devel/roles/controller_inventory_sources
+controller_inventory_sources: []
+
+# Environment specific lists
+# controller_inventory_sources_dev: []
+# controller_inventory_sources_prod: []
+...

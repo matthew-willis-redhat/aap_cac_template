@@ -1,20 +1,17 @@
 ---
-- name: Collect configurations | controller_settings
+- name: Collect configurations
   ansible.builtin.include_tasks:
     file: "configure_items.yml"
+    apply: 
+      tags: dispatch
   vars:
     __configure_aap_dir: "{{ item['directory'] }}"
     __configure_aap_setting: "{{ item['name'] }}"
     __configure_var_name: "{{ item['default_attr'] }}"
     __configure_var_env_name: "{{ item['env_attr'] }}"
   loop: "{{ configuration_items }}"
-  when:
-    - item['name'] == 'controller_settings'
 
-- name: INCLUDE_ROLE | infra.aap_configuration.controller_settings
+- name: INCLUDE_ROLE | infra.aap_configuration.dispatch
   ansible.builtin.include_role:
-    name: infra.aap_configuration.controller_settings
-  when:
-    - controller_settings is defined
-    - controller_settings | length > 0
+    name: infra.aap_configuration.dispatch
 ...

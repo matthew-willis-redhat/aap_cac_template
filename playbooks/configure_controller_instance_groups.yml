@@ -1,37 +1,20 @@
 ---
-- name: Configure Ansible Automation Platform | controller_instance_groups
-  hosts: "{{ env | default('dev') }}"
-  connection: local
-  gather_facts: false
+- name: Collect configurations | controller_instance_groups
+  ansible.builtin.include_tasks:
+    file: "configure_items.yml"
+  vars:
+    __configure_aap_dir: "{{ item['directory'] }}"
+    __configure_aap_setting: "{{ item['name'] }}"
+    __configure_var_name: "{{ item['default_attr'] }}"
+    __configure_var_env_name: "{{ item['env_attr'] }}"
+  loop: "{{ configuration_items }}"
+  when:
+    - item['name'] == 'controller_instance_groups'
 
-  pre_tasks:
-    - name: Include vars from vault | controller_instance_groups
-      ansible.builtin.include_vars:
-        file: "../vaults/{{ env }}.yml"
-      tags:
-        - always
-
-  tasks:
-    - name: Collect configurations | controller_instance_groups
-      ansible.builtin.include_tasks:
-        file: "configure_items.yml"
-      vars:
-        __configure_aap_dir: "{{ item['directory'] }}"
-        __configure_aap_setting: "{{ item['name'] }}"
-        __configure_var_name: "{{ item['default_attr'] }}"
-        __configure_var_env_name: "{{ item['env_attr'] }}"
-      loop: "{{ configuration_items }}"
-      when:
-        - item['name'] == 'controller_instance_groups'
-      tags:
-        - always
-
-    - name: INCLUDE_ROLE | infra.aap_configuration.controller_instance_groups
-      ansible.builtin.include_role:
-        name: infra.aap_configuration.controller_instance_groups
-      when:
-        - controller_instance_groups is defined
-        - controller_instance_groups| length > 0
-      tags:
-        - always
+- name: INCLUDE_ROLE | infra.aap_configuration.controller_instance_groups
+  ansible.builtin.include_role:
+    name: infra.aap_configuration.controller_instance_groups
+  when:
+    - controller_instance_groups is defined
+    - controller_instance_groups| length > 0
 ...

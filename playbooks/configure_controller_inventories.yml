@@ -1,56 +1,35 @@
 ---
-- name: Configure Ansible Automation Platform | controller_inventories & controller_inventory_sources
-  hosts: "{{ env | default('dev') }}"
-  connection: local
-  gather_facts: false
+- name: Collect configurations | controller_inventories & controller_inventory_sources
+  ansible.builtin.include_tasks:
+    file: "configure_items.yml"
+  vars:
+    __configure_aap_dir: "{{ item['directory'] }}"
+    __configure_aap_setting: "{{ item['name'] }}"
+    __configure_var_name: "{{ item['default_attr'] }}"
+    __configure_var_env_name: "{{ item['env_attr'] }}"
+  loop: "{{ configuration_items }}"
+  when:
+    - item['name'] == 'controller_inventories' or
+      item['name'] == 'controller_inventory_sources'
 
-  pre_tasks:
-    - name: Include vars from vault | controller_inventories & controller_inventory_sources
-      ansible.builtin.include_vars:
-        file: "../vaults/{{ env }}.yml"
-      tags:
-        - always
+- name: INCLUDE_ROLE | infra.aap_configuration.controller_inventories
+  ansible.builtin.include_role:
+    name: infra.aap_configuration.controller_inventories
+  when:
+    - controller_inventories is defined
+    - controller_inventories | length > 0
 
-  tasks:
-    - name: Collect configurations | controller_inventories & controller_inventory_sources
-      ansible.builtin.include_tasks:
-        file: "configure_items.yml"
-      vars:
-        __configure_aap_dir: "{{ item['directory'] }}"
-        __configure_aap_setting: "{{ item['name'] }}"
-        __configure_var_name: "{{ item['default_attr'] }}"
-        __configure_var_env_name: "{{ item['env_attr'] }}"
-      loop: "{{ configuration_items }}"
-      when:
-        - item['name'] == 'controller_inventories' or
-          item['name'] == 'controller_inventory_sources'
-      tags:
-        - always
+- name: INCLUDE_ROLE | infra.aap_configuration.controller_inventory_sources
+  ansible.builtin.include_role:
+    name: infra.aap_configuration.controller_inventory_sources
+  when:
+    - controller_inventory_sources is defined
+    - controller_inventory_sources | length > 0
 
-    - name: INCLUDE_ROLE | infra.aap_configuration.controller_inventories
-      ansible.builtin.include_role:
-        name: infra.aap_configuration.controller_inventories
-      when:
-        - controller_inventories is defined
-        - controller_inventories | length > 0
-      tags:
-        - always
-
-    - name: INCLUDE_ROLE | infra.aap_configuration.controller_inventory_sources
-      ansible.builtin.include_role:
-        name: infra.aap_configuration.controller_inventory_sources
-      when:
-        - controller_inventory_sources is defined
-        - controller_inventory_sources | length > 0
-      tags:
-        - always
-
-    - name: INCLUDE_ROLE | infra.aap_configuration.controller_inventory_source_update
-      ansible.builtin.include_role:
-        name: infra.aap_configuration.controller_inventory_source_update
-      when:
-        - controller_inventory_sources is defined
-        - controller_inventory_sources | length > 0
-      tags:
-        - always
+- name: INCLUDE_ROLE | infra.aap_configuration.controller_inventory_source_update
+  ansible.builtin.include_role:
+    name: infra.aap_configuration.controller_inventory_source_update
+  when:
+    - controller_inventory_sources is defined
+    - controller_inventory_sources | length > 0
 ...
