@@ -181,6 +181,78 @@
         - never
         - gateway_routes
 
+    - name: INCLUDE_TASK | configure_hub_namespaces.yml
+      ansible.builtin.include_tasks:
+        file: configure_hub_namespaces.yml
+        apply: 
+          tags: 
+            - hub_namespaces
+      when: 
+        - config_hub_namespaces
+      tags:
+        - never
+        - hub_namespaces
+    
+    - name: INCLUDE_TASK | configure_hub_collections.yml
+      ansible.builtin.include_tasks:
+        file: configure_hub_collections.yml
+        apply: 
+          tags: 
+            - hub_collections
+      when: 
+        - config_hub_collections
+      tags:
+        - never
+        - hub_collections
+    
+    - name: INCLUDE_TASK | configure_hub_registries.yml
+      ansible.builtin.include_tasks:
+        file: configure_hub_registries.yml
+        apply: 
+          tags: 
+            - hub_registries
+      when: 
+        - config_hub_registries
+      tags:
+        - never
+        - hub_registries
+    
+    - name: INCLUDE_TASK | configure_hub_collection_repositories.yml
+      ansible.builtin.include_tasks:
+        file: configure_hub_collection_repositories.yml
+        apply: 
+          tags: 
+            - hub_collection_repositories
+      when: 
+        - config_hub_collection_repositories
+      tags:
+        - never
+        - hub_collection_repositories
+    
+    - name: INCLUDE_TASK | configure_hub_ee_images.yml
+      ansible.builtin.include_tasks:
+        file: configure_hub_ee_images.yml
+        apply: 
+          tags: 
+            - hub_ee_images
+      when: 
+        - config_hub_ee_images
+      tags:
+        - never
+        - hub_ee_images
+    
+    - name: INCLUDE_TASK | configure_hub_collection_remotes.yml
+      ansible.builtin.include_tasks:
+        file: configure_hub_collection_remotes.yml
+        apply: 
+          tags: 
+            - hub_collection_remotes
+      when: 
+        - config_hub_collection_remotes
+      tags:
+        - never
+        - hub_collection_remotes
+
     - name: INCLUDE_TASK | configure_controller_settings.yml
       ansible.builtin.include_tasks:
         file: configure_controller_settings.yml

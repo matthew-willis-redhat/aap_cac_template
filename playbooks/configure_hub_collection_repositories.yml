@@ -1,46 +1,27 @@
 ---
-- name: Configure Ansible Automation Platform | hub_collection_repository & hub_collection_repository_sync
-  hosts: "{{ env | default('dev') }}"
-  connection: local
-  gather_facts: false
+- name: Collect configurations | hub_collection_repository & hub_collection_repository_sync
+  ansible.builtin.include_tasks:
+    file: "configure_items.yml"
+  vars:
+    __configure_aap_dir: "{{ item['directory'] }}"
+    __configure_aap_setting: "{{ item['name'] }}"
+    __configure_var_name: "{{ item['default_attr'] }}"
+    __configure_var_env_name: "{{ item['env_attr'] }}"
+  loop: "{{ configuration_items }}"
+  when:
+    - item['name'] == 'hub_collection_repositories'
 
-  pre_tasks:
-    - name: Include vars from vault | hub_collection_repository & hub_collection_repository_sync
-      ansible.builtin.include_vars:
-        file: "../vaults/{{ env }}.yml"
-      tags:
-        - always
+- name: INCLUDE_ROLE | infra.aap_configuration.hub_collection_repository
+  ansible.builtin.include_role:
+    name: infra.aap_configuration.hub_collection_repository
+  when:
+    - hub_collection_repositories is defined
+    - hub_collection_repositories | length > 0
 
-  tasks:
-    - name: Collect configurations | hub_collection_repository & hub_collection_repository_sync
-      ansible.builtin.include_tasks:
-        file: "configure_items.yml"
-      vars:
-        __configure_aap_dir: "{{ item['directory'] }}"
-        __configure_aap_setting: "{{ item['name'] }}"
-        __configure_var_name: "{{ item['default_attr'] }}"
-        __configure_var_env_name: "{{ item['env_attr'] }}"
-      loop: "{{ configuration_items }}"
-      when:
-        - item['name'] == 'hub_collection_repository'
-      tags:
-        - always
-
-    - name: INCLUDE_ROLE | infra.aap_configuration.hub_collection_repository
-      ansible.builtin.include_role:
-        name: infra.aap_configuration.hub_collection_repository
-      when:
-        - hub_collection_repositories is defined
-        - hub_collection_repositories | length > 0
-      tags:
-        - always
-
-    - name: INCLUDE_ROLE | infra.aap_configuration.hub_collection_repository_sync
-      ansible.builtin.include_role:
-        name: infra.aap_configuration.hub_collection_repository_sync
-      when:
-        - hub_collection_repositories is defined
-        - hub_collection_repositories | length > 0
-      tags:
-        - always
+- name: INCLUDE_ROLE | infra.aap_configuration.hub_collection_repository_sync
+  ansible.builtin.include_role:
+    name: infra.aap_configuration.hub_collection_repository_sync
+  when:
+    - hub_collection_repositories is defined
+    - hub_collection_repositories | length > 0
 ...

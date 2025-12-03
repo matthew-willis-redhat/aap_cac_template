@@ -1,7 +1,7 @@
 ---
 configs_directory: "../configs"
 
-
+# Configuration Rules
 config_controller_applications: true
 config_controller_bulk_hosts: true
 config_controller_credential_input_sources: true
@@ -22,7 +22,6 @@ config_controller_roles: true
 config_controller_schedules: true
 config_controller_settings: true
 config_controller_workflow_job_templates: true
-
 config_eda_credential_types: true
 config_eda_credentials: true
 config_eda_controller_tokens: true
@@ -30,8 +29,6 @@ config_eda_projects: true
 config_eda_event_streams: true
 config_eda_decision_environments: true
 config_eda_rulebook_activations: true
-
-
 config_gateway_applications: true
 config_gateway_authenticator_maps: true
 config_gateway_authenticators: true
@@ -46,8 +43,15 @@ config_gateway_services: true
 config_gateway_settings: true
 config_gateway_teams: true
 config_gateway_users: true
+config_hub_namespaces: true
+config_hub_collections: true
+config_hub_ee_registries: true
+config_hub_ee_repositories: true
+config_hub_ee_images: true
+config_hub_collection_remotes: true
+config_hub_collection_repositories: true
 
-
+# Configuration Items
 gateway_configuration_items:
   - name: gateway_authenticators
     directory: "gateway/gateway_authenticators"
@@ -121,42 +125,37 @@ gateway_configuration_items:
     role_name: "infra.aap_configuration.gateway_routes"
 
 hub_configuration_items:
-  - name: hub_namespace
+  - name: hub_namespaces
     directory: "hub/hub_namespace"
     default_attr: "ansible_facts.hub_namespaces"
     env_attr: "ansible_facts.hub_namespaces_{{ env }}"
     role_name: "infra.aap_configuration.hub_namespace"
-  - name: hub_collection
+  - name: hub_collections
     directory: "hub/hub_collection"
     default_attr: "ansible_facts.hub_collections"
     env_attr: "ansible_facts.hub_collections_{{ env }}"
     role_name: "infra.aap_configuration.hub_collection"
-  - name: hub_ee_registry
+  - name: hub_ee_registries
     directory: "hub/hub_ee_registry"
     default_attr: "ansible_facts.hub_ee_registries"
     env_attr: "ansible_facts.hub_ee_registries_{{ env }}"
     role_name: "infra.aap_configuration.hub_ee_registry"
-  - name: hub_ee_repository
+  - name: hub_ee_repositories
     directory: "hub/hub_ee_repository"
     default_attr: "ansible_facts.hub_ee_repositories"
     env_attr: "ansible_facts.hub_ee_repositories_{{ env }}"
     role_name: "infra.aap_configuration.hub_ee_repository"
-  - name: hub_ee_repository
-    directory: "hub/hub_ee_repository"
-    default_attr: "ansible_facts.hub_ee_repositories"
-    env_attr: "ansible_facts.hub_ee_repositories_{{ env }}"
-    role_name: "infra.aap_configuration.hub_ee_repository"
-  - name: hub_ee_image
+  - name: hub_ee_images
     directory: "hub/hub_ee_image"
     default_attr: "ansible_facts.hub_ee_images"
     env_attr: "ansible_facts.hub_ee_images_{{ env }}"
     role_name: "infra.aap_configuration.hub_ee_image"
-  - name: hub_collection_remote
+  - name: hub_collection_remotes
     directory: "hub/hub_collection_remote"
     default_attr: "ansible_facts.hub_collection_remotes"
     env_attr: "ansible_facts.hub_collection_remotes_{{ env }}"
     role_name: "infra.aap_configuration.hub_collection_remote"
-  - name: hub_collection_repository
+  - name: hub_collection_repositories
     directory: "hub/hub_collection_repository"
     default_attr: "ansible_facts.hub_collection_repositories"
     env_attr: "ansible_facts.hub_collection_repositories_{{ env }}"

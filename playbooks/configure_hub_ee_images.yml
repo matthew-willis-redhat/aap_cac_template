@@ -1,5 +1,5 @@
 ---
-- name: Collect configurations | hub_collection_remote
+- name: Collect configurations | hub_ee_image
   ansible.builtin.include_tasks:
     file: "configure_items.yml"
   vars:
@@ -9,12 +9,12 @@
     __configure_var_env_name: "{{ item['env_attr'] }}"
   loop: "{{ configuration_items }}"
   when:
-    - item['name'] == 'hub_collection_remotes'
+    - item['name'] == 'hub_ee_images'
 
-- name: INCLUDE_ROLE | infra.aap_configuration.hub_collection_remote
+- name: INCLUDE_ROLE | infra.aap_configuration.hub_ee_image
   ansible.builtin.include_role:
-    name: infra.aap_configuration.hub_collection_remote
+    name: infra.aap_configuration.hub_ee_image
   when:
-    - hub_collection_remotes is defined
-    - hub_collection_remotes | length > 0
+    - hub_ee_images is defined
+    - hub_ee_images | length > 0
 ...

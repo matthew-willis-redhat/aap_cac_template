@@ -1,55 +1,34 @@
 ---
-- name: Configure Ansible Automation Platform | hub_ee_registry, hub_ee_registry_index, & hub_ee_registry_sync
-  hosts: "{{ env | default('dev') }}"
-  connection: local
-  gather_facts: false
+- name: Collect configurations | hub_ee_registry, hub_ee_registry_index, & hub_ee_registry_sync
+  ansible.builtin.include_tasks:
+    file: "configure_items.yml"
+  vars:
+    __configure_aap_dir: "{{ item['directory'] }}"
+    __configure_aap_setting: "{{ item['name'] }}"
+    __configure_var_name: "{{ item['default_attr'] }}"
+    __configure_var_env_name: "{{ item['env_attr'] }}"
+  loop: "{{ configuration_items }}"
+  when:
+    - item['name'] == 'hub_ee_registries'
 
-  pre_tasks:
-    - name: Include vars from vault | hub_ee_registry, hub_ee_registry_index, & hub_ee_registry_sync
-      ansible.builtin.include_vars:
-        file: "../vaults/{{ env }}.yml"
-      tags:
-        - always
+- name: INCLUDE_ROLE | infra.aap_configuration.hub_ee_registry
+  ansible.builtin.include_role:
+    name: infra.aap_configuration.hub_ee_registry
+  when:
+    - hub_ee_registries is defined
+    - hub_ee_registries | length > 0
 
-  tasks:
-    - name: Collect configurations | hub_ee_registry, hub_ee_registry_index, & hub_ee_registry_sync
-      ansible.builtin.include_tasks:
-        file: "configure_items.yml"
-      vars:
-        __configure_aap_dir: "{{ item['directory'] }}"
-        __configure_aap_setting: "{{ item['name'] }}"
-        __configure_var_name: "{{ item['default_attr'] }}"
-        __configure_var_env_name: "{{ item['env_attr'] }}"
-      loop: "{{ configuration_items }}"
-      when:
-        - item['name'] == 'hub_ee_registry'
-      tags:
-        - always
+- name: INCLUDE_ROLE | infra.aap_configuration.hub_ee_registry_index
+  ansible.builtin.include_role:
+    name: infra.aap_configuration.hub_ee_registry_index
+  when:
+    - hub_ee_registries is defined
+    - hub_ee_registries | length > 0
 
-    - name: INCLUDE_ROLE | infra.aap_configuration.hub_ee_registry
-      ansible.builtin.include_role:
-        name: infra.aap_configuration.hub_ee_registry
-      when:
-        - hub_ee_registries is defined
-        - hub_ee_registries | length > 0
-      tags:
-        - always
-
-    - name: INCLUDE_ROLE | infra.aap_configuration.hub_ee_registry_index
-      ansible.builtin.include_role:
-        name: infra.aap_configuration.hub_ee_registry_index
-      when:
-        - hub_ee_registries is defined
-        - hub_ee_registries | length > 0
-      tags:
-        - always
-
-    - name: INCLUDE_ROLE | infra.aap_configuration.hub_ee_registry_sync
-      ansible.builtin.include_role:
-        name: infra.aap_configuration.hub_ee_registry_sync
-      when:
-        - hub_ee_registries is defined
-        - hub_ee_registries | length > 0
-      tags:
-        - always
+- name: INCLUDE_ROLE | infra.aap_configuration.hub_ee_registry_sync
+  ansible.builtin.include_role:
+    name: infra.aap_configuration.hub_ee_registry_sync
+  when:
+    - hub_ee_registries is defined
+    - hub_ee_registries | length > 0
 ...
