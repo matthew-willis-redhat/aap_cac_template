@@ -1,4 +1,4 @@
-# Ansible Automation Platform Configuration as Code examples template
+# Ansible Automation Platform - Configuration as Code - Template
 
 This is a combination of all the Red Hat CoP Config as Code collections to deploy and configure Ansible Automation Platform. This is built for multi environment (meaning multiple AAP instances/clusters), similary setup as the [Red Hat CoP - AAP Configuration Template](https://github.com/redhat-cop/aap_configuration_template.git). However, there are a few changes in this template that differs from the other template repository. 
 
@@ -33,7 +33,7 @@ vault_pass: 'the password to decrypt this vault'
 
 ## Getting Help
 
-We are on the Ansible Forums and Matrix, if you want to discuss something, ask for help, or participate in the community, please use the #infra-config-as-code tag on the fourm, or post to the chat in Matrix.
+Getting help with the Ansible Forums and Matrix, if you want to discuss something, ask for help, or participate in the community. Please use the #infra-config-as-code tag on the forum, or post to the chat in Matrix.
 
 [Ansible Forums](https://forum.ansible.com/tag/infra-config-as-code)
 
