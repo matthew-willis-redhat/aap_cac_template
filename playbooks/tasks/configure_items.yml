@@ -9,6 +9,14 @@
       - '*.yaml'
   register: configs
 
+- name: Display list of config files | {{ __configure_aap_dir }}
+  ansible.builtin.debug:
+    msg: "Config directory: {{ config }}"
+    verbosity: 2
+  loop: "{{ configs['files'] | map(attribute='path') }}"
+  loop_control:
+    loop_var: config
+
 - name: Include vars from configs directory | {{ __configure_aap_dir }}
   ansible.builtin.include_vars:
     file: "{{ config }}"
@@ -17,10 +25,23 @@
     loop_var: config
   register: included_configs
 
-- name: Create combined list | {{ __configure_aap_setting }}
-  ansible.builtin.set_fact:
-    "{{ __configure_aap_setting }}": "{{ included_configs['results'] | map(attribute=__configure_var_name, default=[]) | flatten }}"
+- name: Configure Lists  
+  when: __configure_var_obj_type == "list"
+  block:
 
-- name: Append the optional env values
-  ansible.builtin.set_fact:
-    "{{ __configure_aap_setting }}": "{{ lookup('ansible.builtin.vars', __configure_aap_setting) + (included_configs['results'] | map(attribute=__configure_var_env_name, default=[]) | flatten) }}"
+    - name: Create combined list | {{ __configure_aap_setting }}
+      ansible.builtin.set_fact:
+        "{{ __configure_aap_setting }}": "{{ included_configs['results'] | map(attribute=__configure_var_name, default=[]) | flatten }}"
+
+    - name: Append the optional env values
+      ansible.builtin.set_fact:
+        "{{ __configure_aap_setting }}": "{{ lookup('ansible.builtin.vars', __configure_aap_setting) + (included_configs['results'] | map(attribute=__configure_var_env_name, default=[]) | flatten) }}"
+
+- name: Configure Dictionaries  
+  when: __configure_var_obj_type == "dict"
+  block:
+
+    - name: Create dictionary | {{ __configure_aap_setting }}
+      ansible.builtin.set_fact:
+        "{{ __configure_aap_setting }}": "{{ included_configs['results'] | map(attribute=__configure_var_name, default={}) | select('ne', {}) | first | default({}) }}"
+...

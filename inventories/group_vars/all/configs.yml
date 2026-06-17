@@ -318,8 +318,8 @@ eda_configuration_items:
 
 # Combined list of configuration items
 configuration_items: >
-  {{ gateway_configuration_items
-   + hub_configuration_items
-   + controller_configuration_items
-   + eda_configuration_items }}
+  {{ (gateway_configuration_items | default([]))
+   + (hub_configuration_items | default([]))
+   + (controller_configuration_items | default([]))
+   + (eda_configuration_items | default([])) }}
 ...
