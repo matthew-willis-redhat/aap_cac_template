@@ -11,6 +11,36 @@
       tags:
         - always
 
+    - name: Option not supported
+      tags:
+        # - controller_applications
+        # - controller_bulk_host_create
+        # - controller_credential_types
+        # - controller_execution_environments
+        # - controller_host_groups
+        # - controller_hosts
+        # - controller_instance_groups
+        # - controller_instances
+        # - controller_license
+        # - controller_role_definitions
+        # - controller_roles
+        # - controller_settings
+        # - eda_controller_tokens
+        # - eda_credential_types
+        # - eda_decision_environments
+        # - gateway
+        # - hub
+        - never
+      block:
+        - name: Set unsupported_tag
+          ansible.builtin.set_fact:
+            unsupported_tag: true
+
+        - name: Inform user unsupported option (tag)
+          ansible.builtin.assert:
+            that: not unsupported_tag | bool
+            fail_msg: Option (tag) not supported by this version of configure_aap.yml      
+
   tasks:
     - name: INCLUDE_TASK | dispatch
       ansible.builtin.include_tasks:
@@ -18,7 +48,7 @@
 
     - name: Configure Gateway
       when:
-        - config_gateway
+        - config_gateway | default(false) | bool
       tags:
         - gateway
       block:      
@@ -30,8 +60,8 @@
                 - gateway_authenticators
                 - gateway_authenticator_maps
           when:
-            - config_gateway_authenticators
-            - config_gateway_authenticator_maps
+            - config_gateway_authenticators | default(false) | bool
+            - config_gateway_authenticator_maps | default(false) | bool
           tags:
             - never
             - gateway_authenticators
@@ -56,7 +86,7 @@
               tags: 
                 - gateway_organizations
           when: 
-            - config_gateway_organizations
+            - config_gateway_organizations | default(false) | bool
           tags:
             - never
             - gateway_organizations
@@ -68,7 +98,7 @@
               tags: 
                 - gateway_applications
           when: 
-            - config_gateway_applications
+            - config_gateway_applications | default(false) | bool
           tags:
             - never
             - gateway_applications
@@ -80,7 +110,7 @@
               tags: 
                 - gateway_http_ports
           when: 
-            - config_gateway_http_ports
+            - config_gateway_http_ports | default(false) | bool
           tags:
             - never
             - gateway_http_ports
@@ -92,7 +122,7 @@
               tags: 
                 - gateway_service_clusters
           when: 
-            - config_gateway_service_clusters
+            - config_gateway_service_clusters | default(false) | bool
           tags:
             - never
             - gateway_service_clusters
@@ -104,7 +134,7 @@
               tags: 
                 - gateway_service_keys
           when: 
-            - config_gateway_service_keys
+            - config_gateway_service_keys | default(false) | bool
           tags:
             - never
             - gateway_service_keys
@@ -116,7 +146,7 @@
               tags: 
                 - gateway_service_nodes
           when: 
-            - config_gateway_service_nodes
+            - config_gateway_service_nodes | default(false) | bool
           tags:
             - never
             - gateway_service_nodes
@@ -128,7 +158,7 @@
               tags: 
                 - gateway_services
           when: 
-            - config_gateway_services
+            - config_gateway_services | default(false) | bool
           tags:
             - never
             - gateway_services
@@ -140,7 +170,7 @@
               tags: 
                 - gateway_teams
           when: 
-            - config_gateway_teams
+            - config_gateway_teams | default(false) | bool
           tags:
             - never
             - gateway_teams
@@ -152,7 +182,7 @@
               tags: 
                 - gateway_users
           when: 
-            - config_gateway_users
+            - config_gateway_users | default(false) | bool
           tags:
             - never
             - gateway_users
@@ -164,7 +194,7 @@
               tags: 
                 - gateway_role_user_assignments
           when: 
-            - config_gateway_role_user_assignments
+            - config_gateway_role_user_assignments | default(false) | bool
           tags:
             - never
             - gateway_role_user_assignments
@@ -176,14 +206,14 @@
               tags: 
                 - gateway_routes
           when: 
-            - config_gateway_routes
+            - config_gateway_routes | default(false) | bool
           tags:
             - never
             - gateway_routes
 
     - name: Configure Hub
       when:
-        - config_hub
+        - config_hub | default(false) | bool
       tags:
         - hub
       block: 
@@ -194,7 +224,7 @@
               tags: 
                 - hub_namespaces
           when: 
-            - config_hub_namespaces
+            - config_hub_namespaces | default(false) | bool
           tags:
             - never
             - hub_namespaces
@@ -206,7 +236,7 @@
               tags: 
                 - hub_collections
           when: 
-            - config_hub_collections
+            - config_hub_collections | default(false) | bool
           tags:
             - never
             - hub_collections
@@ -218,7 +248,7 @@
               tags: 
                 - hub_registries
           when: 
-            - config_hub_registries
+            - config_hub_registries | default(false) | bool
           tags:
             - never
             - hub_registries
@@ -230,7 +260,7 @@
               tags: 
                 - hub_collection_repositories
           when: 
-            - config_hub_collection_repositories
+            - config_hub_collection_repositories | default(false) | bool
           tags:
             - never
             - hub_collection_repositories
@@ -242,7 +272,7 @@
               tags: 
                 - hub_ee_images
           when: 
-            - config_hub_ee_images
+            - config_hub_ee_images | default(false) | bool
           tags:
             - never
             - hub_ee_images
@@ -254,14 +284,14 @@
               tags: 
                 - hub_collection_remotes
           when: 
-            - config_hub_collection_remotes
+            - config_hub_collection_remotes | default(false) | bool
           tags:
             - never
             - hub_collection_remotes
 
     - name: Configure Controller
       when:
-        - config_controller
+        - config_controller | default(false) | bool
       tags:
         - controller
       block: 
@@ -272,7 +302,7 @@
               tags: 
                 - controller_settings
           when: 
-            - config_controller_settings
+            - config_controller_settings | default(false) | bool
           tags:
             - never
             - controller_settings
@@ -284,7 +314,7 @@
               tags: 
                 - controller_instances
           when:
-            - config_controller_instances
+            - config_controller_instances | default(false) | bool
           tags:
             - never
             - controller_instances
@@ -296,7 +326,7 @@
               tags: 
                 - controller_instance_groups
           when: 
-            - config_controller_instance_groups
+            - config_controller_instance_groups | default(false) | bool
           tags:
             - never
             - controller_instance_groups
@@ -308,7 +338,7 @@
               tags: 
                 - controller_labels
           when: 
-            - config_controller_labels
+            - config_controller_labels | default(false) | bool
           tags:
             - never
             - controller_labels
@@ -320,7 +350,7 @@
               tags: 
                 - controller_credential_types
           when: 
-            - config_controller_credential_types
+            - config_controller_credential_types | default(false) | bool
           tags:
             - never
             - controller_credential_types
@@ -332,7 +362,7 @@
               tags: 
                 - controller_credentials
           when: 
-            - config_controller_credentials
+            - config_controller_credentials | default(false) | bool
           tags:
             - never
             - controller_credentials
@@ -344,7 +374,7 @@
               tags: 
                 - controller_credential_input_sources
           when: 
-            - config_controller_credential_input_sources
+            - config_controller_credential_input_sources | default(false) | bool
           tags:
             - never
             - controller_credential_input_sources
@@ -356,7 +386,7 @@
               tags: 
                 - controller_execution_environments
           when: 
-            - config_controller_execution_environments
+            - config_controller_execution_environments | default(false) | bool
           tags:
             - never
             - controller_execution_environments
@@ -368,7 +398,7 @@
               tags: 
                 - configure_controller_applications
           when: 
-            - config_controller_applications
+            - config_controller_applications | default(false) | bool
           tags:
             - never
             - configure_controller_applications
@@ -380,7 +410,7 @@
               tags: 
                 - controller_notification_templates
           when: 
-            - config_controller_notification_templates
+            - config_controller_notification_templates | default(false) | bool
           tags:
             - never
             - controller_notification_templates
@@ -392,7 +422,7 @@
               tags: 
                 - controller_projects
           when: 
-            - config_controller_projects
+            - config_controller_projects | default(false) | bool
           tags:
             - never
             - controller_projects
@@ -405,8 +435,8 @@
                 - controller_inventories
                 - controller_inventory_sources
           when: 
-            - config_controller_inventories
-            - config_controller_inventory_sources
+            - config_controller_inventories | default(false) | bool
+            - config_controller_inventory_sources | default(false) | bool
           tags:
             - never
             - controller_inventories
@@ -420,8 +450,8 @@
                 - controller_hosts
                 - controller_host_groups
           when: 
-            - config_controller_hosts
-            - config_controller_host_groups
+            - config_controller_hosts | default(false) | bool
+            - config_controller_host_groups | default(false) | bool
           tags:
             - never
             - controller_hosts
@@ -434,7 +464,7 @@
               tags: 
                 - controller_bulk_hosts
           when: 
-            - config_controller_bulk_hosts
+            - config_controller_bulk_hosts | default(false) | bool
           tags:
             - never
             - controller_bulk_hosts
@@ -446,7 +476,7 @@
               tags: 
                 - controller_job_templates
           when: 
-            - config_controller_job_templates
+            - config_controller_job_templates | default(false) | bool
           tags:
             - never
             - controller_job_templates
@@ -458,7 +488,7 @@
               tags: 
                 - controller_workflow_job_templates
           when: 
-            - config_controller_workflow_job_templates
+            - config_controller_workflow_job_templates | default(false) | bool
           tags:
             - never
             - controller_workflow_job_templates
@@ -470,7 +500,7 @@
               tags: 
                 - controller_schedules
           when: 
-            - config_controller_schedules
+            - config_controller_schedules | default(false) | bool
           tags:
             - never
             - controller_schedules    
@@ -482,14 +512,14 @@
               tags: 
                 - controller_roles
           when: 
-            - config_controller_roles
+            - config_controller_roles | default(false) | bool
           tags:
             - never
             - controller_roles
     
     - name: Configure EDA
       when:
-        - config_eda
+        - config_eda | default(false) | bool
       tags:
         - eda
       block: 
@@ -500,7 +530,7 @@
               tags: 
                 - eda_credential_types
           when: 
-            - config_eda_credential_types
+            - config_eda_credential_types | default(false) | bool
           tags:
             - never
             - eda_credential_types
@@ -512,7 +542,7 @@
               tags: 
                 - eda_credentials
           when: 
-            - config_eda_credentials
+            - config_eda_credentials | default(false) | bool
           tags:
             - never
             - eda_credentials
@@ -524,7 +554,7 @@
               tags: 
                 - eda_controller_tokens
           when: 
-            - config_eda_controller_tokens
+            - config_eda_controller_tokens | default(false) | bool
           tags:
             - never
             - eda_controller_tokens
@@ -536,7 +566,7 @@
               tags: 
                 - eda_projects
           when: 
-            - config_eda_projects
+            - config_eda_projects | default(false) | bool
           tags:
             - never
             - eda_projects
@@ -548,7 +578,7 @@
               tags: 
                 - eda_event_streams
           when: 
-            - config_eda_event_streams
+            - config_eda_event_streams | default(false) | bool
           tags:
             - never
             - eda_event_streams
@@ -560,7 +590,7 @@
               tags: 
                 - eda_decision_environments
           when: 
-            - config_eda_decision_environments
+            - config_eda_decision_environments | default(false) | bool
           tags:
             - never
             - eda_decision_environments
@@ -572,7 +602,7 @@
               tags: 
                 - eda_rulebook_activations
           when: 
-            - config_eda_rulebook_activations
+            - config_eda_rulebook_activations | default(false) | bool
           tags:
             - never
             - eda_rulebook_activations

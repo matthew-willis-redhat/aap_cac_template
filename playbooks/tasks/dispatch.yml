@@ -1,4 +1,41 @@
 ---
+- name: Debug configuration variables availability
+  ansible.builtin.debug:
+    msg: |
+      Configuration item enabled status:
+      {% for ci in configuration_items %}
+      - {{ ci['name'] }}: {{ ci['enabled'] | default('NOT SET') }}
+      {% endfor %}
+    verbosity: 2
+
+- name: Validate configuration item enabled flag
+  ansible.builtin.fail:
+    msg: >-
+      Invalid enabled flag for CI '{{ item['name'] }}'.
+      enabled={{ item['enabled'] | default('__MISSING__') }}
+      type={{ (item['enabled'] | type_debug) if item['enabled'] is defined else 'undefined' }}
+      expected=boolean (true/false)
+  when: item['enabled'] is not defined or item['enabled'] is not boolean
+  loop: "{{ configuration_items }}"
+  loop_control:
+    label: "{{ item['name'] }}"
+
+- name: Build enabled configuration item list
+  ansible.builtin.set_fact:
+    enabled_configuration_items: >-
+      {{
+        configuration_items
+        | selectattr('enabled', 'defined')
+        | selectattr('enabled', 'truthy')
+        | list
+      }}
+
+- name: Display enabled configuration items
+  ansible.builtin.debug:
+    msg: "The {{ item['obj_type'] }} {{ item['name'] }} is enabled for configuration."
+    verbosity: 2
+  loop: "{{ enabled_configuration_items }}"
+
 - name: Collect configurations
   ansible.builtin.include_tasks:
     file: "configure_items.yml"
@@ -9,9 +46,12 @@
     __configure_aap_setting: "{{ item['name'] }}"
     __configure_var_name: "{{ item['default_attr'] }}"
     __configure_var_env_name: "{{ item['env_attr'] }}"
-  loop: "{{ configuration_items }}"
+    __configure_var_obj_type: "{{ item['obj_type'] }}"
+  loop: "{{ enabled_configuration_items }}"
 
 - name: INCLUDE_ROLE | infra.aap_configuration.dispatch
   ansible.builtin.include_role:
     name: infra.aap_configuration.dispatch
+  vars:
+    configuration_items: "{{ enabled_configuration_items }}"
 ...
